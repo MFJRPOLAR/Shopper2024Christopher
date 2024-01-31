@@ -28,7 +28,7 @@ const ListsScreen = props => {
       shopperDB.transaction(txn => {
         
         // execute SELECT
-        txn.exexuteSql(
+        txn.executeSql(
           `SELECT * FROM ${listsTableName}`, 
           [],
           //callback function to handle results from SELECT
@@ -47,7 +47,7 @@ const ListsScreen = props => {
                   id: item.id,
                   name: item.name,
                   store: item.store,
-                  data: item.date,
+                  date: item.date,
                 });
               }
               // assign results array to lists state variables
