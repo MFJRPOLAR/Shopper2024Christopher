@@ -33,8 +33,7 @@ const ListsScreen = props => {
           [],
           //callback function to handle results from SELECT
           (_, res) => {
-            console.log('Testing');
-            // get the number of rows selected 
+            // get the number of rows selected
             let len = res.rows.length;
             console.log('Number of rows: ' + len);
             // if more than one row of data was selected 
@@ -43,11 +42,18 @@ const ListsScreen = props => {
               for (let i = 0; i < len; i++){
                 // push a row of data at a time onto results array 
                 let item = res.rows.item(i);
+                if (item.priority == 'LOW') {
+                  block = 'green'
+                } else {
+                  block = 'red'
+                }
                 results.push({
                   id: item.id,
                   name: item.name,
                   store: item.store,
+                  priority: item.priority,
                   date: item.date,
+                  color: block,
                 });
               }
               // assign results array to lists state variables

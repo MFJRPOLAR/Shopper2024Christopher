@@ -3,7 +3,7 @@ import { View, Text, TextInput, Pressable} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
 
-const databse = require('../../components/Handlers/database.js');
+const database = require('../../components/Handlers/database.js');
 
 const AddListScreen = props => {
 
@@ -12,6 +12,7 @@ const AddListScreen = props => {
     const [name, setName] = useState('');
     const [store, setStore] = useState('');
     const [date, setDate] = useState('');
+    const [priority, setPriority] = useState('');
 
     const onListAdd = () => {
         if (!name){
@@ -26,8 +27,13 @@ const AddListScreen = props => {
           alert('Please enter a shopping list date.');
           return;
         }
+        if (!priority){
+          alert('Please enter a shopping list priority.');
+          return;
+        }
+
         try {
-            databse.addList(name,store,date);
+            database.addList(name,store,date,priority);
         } catch (error){
           console.log('Error adding list ' + error);
         }
@@ -51,6 +57,13 @@ const AddListScreen = props => {
             onChangeText={value => setStore(value)}
             style={styles.store}
             placeholder={'Enter Store'}
+            placeholderTextColor={'grey'}
+        />
+        <TextInput
+            value={priority}
+            onChangeText={value => setPriority(value)}
+            style={styles.store}
+            placeholder={'Enter A Priority (LOW,HIGH)'}
             placeholderTextColor={'grey'}
         />
         <TextInput

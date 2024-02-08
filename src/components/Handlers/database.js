@@ -18,7 +18,8 @@ module.exports = {
                     id  INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     store TEXT,
-                    date TEXT
+                    date TEXT,
+                    priority TEXT
                 );`,
                 // arguements passed when using SQL prepared statements 
                 [],
@@ -34,12 +35,12 @@ module.exports = {
     },
 
     // declare function that will insert a row of data into the lists table 
-    addList: async function (name, store, date){
+    addList: async function (name, store, date, priority, Fname){
         // declare transaction that will execute the SQL 
         (await shopperDB).transaction(txn => {
             // execute SQL
             txn.executeSql(
-                `INSERT INTO ${listsTableName} (name, store, date) VALUES ("${name}","${store}","${date}")`,
+                `INSERT INTO ${listsTableName} (name, store, date, priority) VALUES ("${name}","${store}","${date}","${priority}")`,
                 // arguements passed when using SQL prepared statements 
                 [],
                 // callback functions to handle results 
