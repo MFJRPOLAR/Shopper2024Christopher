@@ -5,35 +5,30 @@ import styles from './styles';
 
 const database = require('../../components/Handlers/database.js');
 
-const AddListScreen = props => {
+const AddItemScreen = props => {
 
     const navigation = useNavigation()
 
     const [name, setName] = useState('');
-    const [store, setStore] = useState('');
-    const [date, setDate] = useState('');
-    const [priority, setPriority] = useState('');
+    const [price, setPrice] = useState('');
+    const [quantity, setQuantity] = useState('');
 
-    const onListAdd = () => {
+    const onItemAdd = () => {
         if (!name){
-            alert('Please enter a shopping list name.');
+            alert('Please enter a item name.');
             return;
         }
-        if (!store){
-          alert('Please enter a shopping list store.');
+        if (!price){
+          alert('Please enter a item price.');
           return;
         }
-        if (!date){
-          alert('Please enter a shopping list date.');
-          return;
-        }
-        if (!priority){
-          alert('Please enter a shopping list priority.');
+        if (!quantity){
+          alert('Please enter a quantity.');
           return;
         }
 
         try {
-            database.addList(name,store,date,priority);
+            database.addItem(name,price,quantity);
         } catch (error){
           console.log('Error adding list ' + error);
         }
@@ -53,29 +48,22 @@ const AddListScreen = props => {
             placeholderTextColor={'grey'}
         />
         <TextInput
-            value={store}
-            onChangeText={value => setStore(value)}
-            style={styles.store}
-            placeholder={'Enter Store'}
+            value={price}
+            onChangeText={value => setPrice(value)}
+            style={styles.price}
+            placeholder={'Enter Price'}
             placeholderTextColor={'grey'}
         />
         <TextInput
-            value={priority}
-            onChangeText={value => setPriority(value)}
-            style={styles.priority}
-            placeholder={'Enter A Priority (LOW,HIGH)'}
-            placeholderTextColor={'grey'}
-        />
-        <TextInput
-            value={date}
-            onChangeText={value => setDate(value)}
-            style={styles.date}
-            placeholder={'Enter Date in format YYYY-MM-DD'}
+            value={quantity}
+            onChangeText={value => setQuantity(value)}
+            style={styles.quantity}
+            placeholder={'Enter A Quantity'}
             placeholderTextColor={'grey'}
         />
       </View>
       <View style={styles.bottomContainer}>
-          <Pressable style={styles.button} onPress={onListAdd}>
+          <Pressable style={styles.button} onPress={onItemAdd}>
               <Text style={styles.buttonText}>Add</Text>
           </Pressable>
       </View>
@@ -83,4 +71,4 @@ const AddListScreen = props => {
   );
 };
 
-export default AddListScreen;
+export default AddItemScreen;
