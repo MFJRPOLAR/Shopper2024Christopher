@@ -12,7 +12,6 @@ const Item = props => {
     const navigation = useNavigation();
 
     const onPress = () => {
-        navigation.navigate('Existing List', {post: post})
         
     }
 

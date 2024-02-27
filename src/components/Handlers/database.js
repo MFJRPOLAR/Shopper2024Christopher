@@ -54,9 +54,7 @@ module.exports = {
             );
         });
     },
-};
-
-module.exports = {
+    
     // declare function the will create lists table 
     createItemsTable: async function () {
         // declare transaction that will execute SQL
@@ -102,3 +100,4 @@ module.exports = {
         });
     },
 };
+

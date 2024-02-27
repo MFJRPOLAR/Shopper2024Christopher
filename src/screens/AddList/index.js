@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable} from 'react-native';
+import { View, Text, TextInput, Pressable, Platform} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';
+import SelectDropdown from 'react-native-select-dropdown';
+import DateTimePickerAndroid  from '@react-native-community/datetimepicker';
+
 
 const database = require('../../components/Handlers/database.js');
 
@@ -11,8 +14,22 @@ const AddListScreen = props => {
 
     const [name, setName] = useState('');
     const [store, setStore] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(new Date());
     const [priority, setPriority] = useState('');
+    const [datePicker, setDatePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState('');
+
+    const priorityNames = ['HIGH','LOW'];
+
+    function showDatePicker() {
+      setDatePicker(true);
+    }
+
+    function onDateSelected(event, value) {
+      setDate(value);
+      setDatePicker(false);
+      setSelectedDate(value.toLocaleDateString());
+    } 
 
     const onListAdd = () => {
         if (!name){
@@ -23,17 +40,17 @@ const AddListScreen = props => {
           alert('Please enter a shopping list store.');
           return;
         }
-        if (!date){
-          alert('Please enter a shopping list date.');
+        if (!priority){
+          alert('Please select a shopping list priority.');
           return;
         }
-        if (!priority){
-          alert('Please enter a shopping list priority.');
+        if (!selectedDate){
+          alert('Please select a shopping list date.');
           return;
         }
 
         try {
-            database.addList(name,store,date,priority);
+            database.addList(name,store,date.toLocaleDateString(),priority);
         } catch (error){
           console.log('Error adding list ' + error);
         }
@@ -59,19 +76,49 @@ const AddListScreen = props => {
             placeholder={'Enter Store'}
             placeholderTextColor={'grey'}
         />
-        <TextInput
-            value={priority}
-            onChangeText={value => setPriority(value)}
-            style={styles.priority}
-            placeholder={'Enter A Priority (LOW,HIGH)'}
-            placeholderTextColor={'grey'}
+        <SelectDropdown
+          data={priorityNames}
+          defaultValue={priority}
+          defaultButtonText={'Select Priority'}
+          onSelect={(selectedItem, index) => {
+            setPriority(selectedItem);
+          }}
+          buttonTextAfterSelection={(selectedItem, intdex) => {
+            return selectedItem;
+          }}
+          rowTextForSelection={(item, index) => {
+            return item;
+          }}
+          buttonStyle={styles.dropdownBtnStyle}
+          buttonTextStyle={styles.dropdownBtnTxtStyle}
+          dropdownStyle={styles.dropdownDropdownStyle}
+          rowStyle={styles.dropdownRowStyle}
+          rowTextStyle={styles.dropdownRowTxtStyle}
         />
-        <TextInput
+        {datePicker && (
+          <DateTimePickerAndroid
             value={date}
-            onChangeText={value => setDate(value)}
+            mode={'date'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour={true}
+            onChange={onDateSelected}
+            minimumDate={new Date(Date.now())}
+          />
+        )}
+        {!datePicker && (
+            <View>
+              <Pressable 
+              onPress={showDatePicker} 
+              style={styles.dateButton}>
+                    <Text style={styles.dateButtonText}>Select a date</Text>
+              </Pressable>
+            </View>
+        )}
+        <TextInput
+            value={selectedDate}
             style={styles.date}
-            placeholder={'Enter Date in format YYYY-MM-DD'}
-            placeholderTextColor={'grey'}
+            placeholder={'Selected Date'}
+            editable={false}
         />
       </View>
       <View style={styles.bottomContainer}>
