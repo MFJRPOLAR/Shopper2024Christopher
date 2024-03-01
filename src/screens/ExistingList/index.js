@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import styles from './styles';
 import { View, Text, TextInput, Pressable, Alert} from 'react-native'
+import SelectDropdown from 'react-native-select-dropdown';
+import DateTimePickerAndroid  from '@react-native-community/datetimepicker';
 
 // import openDatabase hook 
 import { openDatabase } from 'react-native-sqlite-storage'
@@ -17,8 +19,22 @@ const ExistingListScreen = props => {
 
     const [name, setName] = useState(post.name);
     const [store, setStore] = useState(post.store);
-    const [date, setDate] = useState(post.date);
+    const [date, setDate] = useState(new Date());
     const [priority, setPriority] = useState(post.priority);
+    const [datePicker, setDatePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(post.date);
+
+    const priorityNames = ['HIGH','LOW'];
+
+    function showDatePicker() {
+        setDatePicker(true);
+      }
+  
+      function onDateSelected(event, value) {
+        setDate(value);
+        setDatePicker(false);
+        setSelectedDate(value.toLocaleDateString());
+      }
 
     const onListUpdate = () => {
         if (!name){
@@ -29,7 +45,7 @@ const ExistingListScreen = props => {
           alert('Please enter a shopping list store.');
           return;
         }
-        if (!date){
+        if (!selectedDate){
           alert('Please enter a shopping list date.');
           return;
         }
@@ -39,7 +55,7 @@ const ExistingListScreen = props => {
         }
         shopperDB.transaction(txn => {
             txn.executeSql(
-                `UPDATE ${listsTableName} SET name = "${name}", store = "${store}", date = "${date}", priority = "${priority}" WHERE id = "${post.id}"`,
+                `UPDATE ${listsTableName} SET name = "${name}", store = "${store}", date = "${date.toLocaleDateString()}", priority = "${priority}" WHERE id = "${post.id}"`,
                 [],
                 () => {
                     console.log(`${name} update successfully`);
@@ -110,19 +126,49 @@ const ExistingListScreen = props => {
             placeholder={'Enter Store'}
             placeholderTextColor={'grey'}
         />
-        <TextInput
-            value={priority}
-            onChangeText={value => setPriority(value)}
-            style={styles.priority}
-            placeholder={'Enter A Priority (LOW,HIGH)'}
-            placeholderTextColor={'grey'}
+        <SelectDropdown
+          data={priorityNames}
+          defaultValue={priority}
+          defaultButtonText={post.priority}
+          onSelect={(selectedItem, index) => {
+            setPriority(selectedItem);
+          }}
+          buttonTextAfterSelection={(selectedItem, intdex) => {
+            return selectedItem;
+          }}
+          rowTextForSelection={(item, index) => {
+            return item;
+          }}
+          buttonStyle={styles.dropdownBtnStyle}
+          buttonTextStyle={styles.dropdownBtnTxtStyle}
+          dropdownStyle={styles.dropdownDropdownStyle}
+          rowStyle={styles.dropdownRowStyle}
+          rowTextStyle={styles.dropdownRowTxtStyle}
         />
-        <TextInput
+        {datePicker && (
+          <DateTimePickerAndroid
             value={date}
-            onChangeText={value => setDate(value)}
+            mode={'date'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour={true}
+            onChange={onDateSelected}
+            minimumDate={new Date(Date.now())}
+          />
+        )}
+        {!datePicker && (
+            <View>
+              <Pressable 
+              onPress={showDatePicker} 
+              style={styles.dateButton}>
+                    <Text style={styles.dateButtonText}>Select a date</Text>
+              </Pressable>
+            </View>
+        )}
+        <TextInput
+            value={selectedDate}
             style={styles.date}
-            placeholder={'Enter Date in format YYYY-MM-DD'}
-            placeholderTextColor={'grey'}
+            placeholder={post.date}
+            editable={false}
         />
       </View>
       <View style={styles.bottomContainer}>

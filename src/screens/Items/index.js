@@ -34,7 +34,7 @@ const ItemsScreen = props => {
           (_, res) => {
             // get the number of rows selected
             let len = res.rows.length;
-            console.log('Number of rows: ' + len);
+            // console.log('Number of rows: ' + len);
             // if more than one row of data was selected 
             if (len > 0){
               // loop through the rows of data
