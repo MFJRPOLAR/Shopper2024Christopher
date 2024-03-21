@@ -3,6 +3,8 @@ import styles from './styles';
 import { Text, TouchableOpacity, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+const database = require('../Handlers/database.js');
+
 const Item = props => {
 
     const post = props.post;
@@ -12,7 +14,16 @@ const Item = props => {
     const navigation = useNavigation();
 
     const onPress = () => {
-        
+        if (post.list_id){
+            try{
+                database.addListItem(post.list_id, post.id)
+            }catch(error){
+                console.log('Error adding list item' + error)
+            }
+            alert('Item added to list!')
+        }else{
+            console.log(post.name)
+        }
     }
 
   return (

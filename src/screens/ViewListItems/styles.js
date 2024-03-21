@@ -25,6 +25,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'white',
   },
+
+  header: {
+    height: 30,
+    marginLeft: 18,
+    marginTop: 10,
+  },
+
+  footer: {
+    height: 60,
+    marginRight: 80,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
+  },
+  totalPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'right',
+  },
+
 });
 
 export default styles;

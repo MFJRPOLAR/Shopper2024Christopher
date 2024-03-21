@@ -20,7 +20,12 @@ const App: () => Node = () => {
   try {
     database.createItemsTable();
   } catch (error) {
-    console.log('Failed to create lists table'+ error);
+    console.log('Failed to create items table'+ error);
+  }
+  try {
+    database.createListItemsTable();
+  } catch (error) {
+    console.log('Failed to create list items table'+ error);
   }
   return <Router />;
 };
