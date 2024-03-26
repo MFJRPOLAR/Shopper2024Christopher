@@ -98,6 +98,7 @@ const ViewListItemsScreen = props => {
       <FlatList 
         data={items}
         renderItem={({item}) => <Item post={item}/>}
+        keyExtractor={item => item.id}
         ListFooterComponent={ListFooter}
         ListHeaderComponent={ListHeader}
       />
