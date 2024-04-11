@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 60,
     position: 'absolute',
-    bottom: 30,
+    bottom: 60,
   },
   button: {
     backgroundColor: 'black',

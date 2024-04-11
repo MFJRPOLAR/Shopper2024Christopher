@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Pressable, SafeAreaView} from 'react-native';
+import {View, Text, Pressable, SafeAreaView, BackHandler} from 'react-native';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
 
@@ -28,9 +28,18 @@ const HomeScreen = () => {
       </View>
       <View style={styles.bottom}>
         <Pressable
+          accessible={true}
+          accessibilityRole='button'
+          accessibilityLabel='Double tap to start shopping'
+          accessibilityHint='Goes to lists Screen'
           style={styles.button}
           onPress={() => navigation.navigate('Start Shopping!')}>
           <Text style={styles.buttonText}>Start Shopping!</Text>
+        </Pressable>
+        <Pressable
+          style={styles.button}
+          onPress={()=>BackHandler.exitApp()}>
+          <Text styles={styles.buttonText}>Exit App!</Text>
         </Pressable>
       </View>
     </View>

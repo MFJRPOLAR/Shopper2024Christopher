@@ -83,6 +83,10 @@ const ListsScreen = props => {
       </View>
         <View style={styles.bottom}>
             <TouchableOpacity
+                accessible={true}
+                accessibilityRole='button'
+                accessibilityLabel='Double tap to add a list'
+                accessibilityHint='Goes to add list Screen'
                 style={styles.button}
                 onPress={() => navigation.navigate('Add List')}>
                 <Text style={styles.buttonText}>Add List</Text>
