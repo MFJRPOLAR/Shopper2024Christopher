@@ -8,6 +8,7 @@ const shopperDB = openDatabase({name: 'Shopper.db'});
 const listsTableName = 'lists';
 const itemsTableName = 'Items';
 const listItemsTableName = 'list_items';
+const userTableName = 'users'; 
 
 module.exports = {
     // declare function the will create lists table 
@@ -140,6 +141,50 @@ module.exports = {
                 },
                 error => {
                     console.log('Error adding list item' + error.message);
+                },
+            );
+        });
+    },
+
+    // declare function the will create user table 
+    createUsersTable: async function () {
+        // declare transaction that will execute SQL
+        (await shopperDB).transaction(txn => {
+            // execute the SQL 
+            txn.executeSql(
+                `CREATE TABLE IF NOT EXISTS ${userTableName}(
+                    id  INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT,
+                    password TEXT
+                );`,
+                // arguements passed when using SQL prepared statements 
+                [],
+                // callback functions to handle results 
+                () => {
+                    console.log('Users table created successfully');
+                },
+                error => {
+                    console.log('Error creating users table' + error.message);
+                },
+            );
+        });
+    },
+
+    // declare function that will insert a row of data into the user table 
+    addUser: async function (username,password){
+        // declare transaction that will execute the SQL 
+        (await shopperDB).transaction(txn => {
+            // execute SQL
+            txn.executeSql(
+                `INSERT INTO ${userTableName} (username, password) VALUES ("${username}","${password}")`,
+                // arguements passed when using SQL prepared statements 
+                [],
+                // callback functions to handle results 
+                () => {
+                    console.log(username + " " + password + " added succesfully.");
+                },
+                error => {
+                    console.log('Error adding user ' + error.message);
                 },
             );
         });
